@@ -72,31 +72,28 @@ public class GameServiceImpl implements IGameService{
     }
 
     public static String calculateGuess(String generated, String guess) {
-        // bug. empty
         String result = "";
-
-        // TODO: chnage to to cols - check generated & guess
+        int exact = 0;
+        int partial = 0;
 
         if (generated.equals(guess)) {
-            result = "e:e:e:e";
-            return result.substring(0,result.length()-1);
+            result = "e:4:p:0";
+            return result;
         } else {
             for (int i = 0; i < guess.length(); i++) {
                 if (generated.charAt(i) == guess.charAt(i)) {
-                    result += "e:";
+                    exact ++;
                 } else if (generated.contains(guess.charAt(i) + "")) {
-                    result += "p:";
-                } else {
-                    result += "0:";
+                    partial ++;
                 }
             }
-            // remove last colin and return
-            return result.substring(0,result.length()-1);
+            result = "e:" + exact + ":p:" + partial;
+            return result;
         }
     }
 
     public boolean isCorrect(String guess) {
-        if (guess.equals("e:e:e:e")) return true;
+        if (guess.equals("e:4:p:0")) return true;
         return false;
     }
 
