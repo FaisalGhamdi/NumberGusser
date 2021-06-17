@@ -12,8 +12,8 @@ public interface GameDAO {
     List <Round> findRoundsById(int id);
 
     //TODO
-    Round makeGuess(Round round);
-    Game findInProgressGame();
+    Round makeGuess(Round round, int id);
+    Game findGameToPlay(int id);
     void updateGameStatus(Game game);
 
 }

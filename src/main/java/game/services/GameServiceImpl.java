@@ -40,17 +40,18 @@ public class GameServiceImpl implements IGameService{
     }
 
     @Override
-    public Round addGuess(Round round, Game game) {
-        game = dao.findInProgressGame();
+    public Round addGuess(Round round, Game game, int id) {
+
+        game = dao.findGameToPlay(id);
         round.setResult(calculateGuess(game.getAnswer(), round.getGuess()));
 
-        // update status ig game is finished (guess is correct)
+        // update status if game is finished (guess is correct)
         if (isCorrect(calculateGuess(game.getAnswer(), round.getGuess()))){
             game.setStatus("finished");
             dao.updateGameStatus(game);
         }
 
-        return dao.makeGuess(round);
+        return dao.makeGuess(round, id);
     }
 
     // helper method to generate random, not duplicate numbers

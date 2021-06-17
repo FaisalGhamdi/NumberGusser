@@ -81,13 +81,7 @@ public class GameDatabaseDAO implements GameDAO{
 
     // Hlper method to get the current in progress game
     // TODO: change
-    @Override
-    public Game findInProgressGame() {
-        final String sql =
-                "SELECT * FROM game WHERE status <> \"finished\" ORDER BY gameid DESC LIMIT 1;";
 
-        return jdbcTemplate.queryForObject(sql, new GameMapper());
-    }
 
     // updates game status to 'finished'
     @Override
@@ -101,8 +95,12 @@ public class GameDatabaseDAO implements GameDAO{
     }
 
     @Override
-    public Round makeGuess(Round round) {
-        Game currGame = findInProgressGame();
+    public Round makeGuess(Round round, int id) {
+        Game currGame = findGameToPlay(id);
+
+        if (currGame == null) {
+            return null;
+        }
 
         final String sql = "INSERT INTO round(gameId, guess, result) VALUES(?,?,?);";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -123,6 +121,15 @@ public class GameDatabaseDAO implements GameDAO{
         round.setGameId(currGame.getGameId());
 
         return round;
+    }
+
+    @Override
+    public Game findGameToPlay(int id) {
+        final String sql =
+                    "SELECT * FROM game" +
+                            " WHERE status <> \"finished\" " +
+                            "AND gameId = (?);";
+        return jdbcTemplate.queryForObject(sql, new GameMapper(), id);
     }
 
     private static final class GameMapper implements RowMapper<Game> {

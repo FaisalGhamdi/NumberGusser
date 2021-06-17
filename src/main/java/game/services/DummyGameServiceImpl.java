@@ -53,7 +53,7 @@ public class DummyGameServiceImpl implements IGameService{
     }
 
     @Override
-    public Round addGuess(Round round, Game game) {
+    public Round addGuess(Round round, Game game, int id) {
         this.game = game;
         this.round = round;
         return round;
