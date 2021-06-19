@@ -41,17 +41,25 @@ public class GameServiceImpl implements IGameService{
 
     @Override
     public Round addGuess(Round round, Game game, int id) {
+        try {
+            game = dao.findGameToPlay(id);
+            round.setResult(calculateGuess(game.getAnswer(), round.getGuess()));
 
-        game = dao.findGameToPlay(id);
-        round.setResult(calculateGuess(game.getAnswer(), round.getGuess()));
+            // update status if game is finished (guess is correct)
+            if (isCorrect(calculateGuess(game.getAnswer(), round.getGuess()))){
+                game.setStatus("finished");
+                dao.updateGameStatus(game);
+            }
 
-        // update status if game is finished (guess is correct)
-        if (isCorrect(calculateGuess(game.getAnswer(), round.getGuess()))){
-            game.setStatus("finished");
-            dao.updateGameStatus(game);
+            return dao.makeGuess(round, id);
+        } catch (NullPointerException e) {
+            return null;
         }
+    }
 
-        return dao.makeGuess(round, id);
+    @Override
+    public Game playGame(int id) {
+        return dao.findGameToPlay(id);
     }
 
     // helper method to generate random, not duplicate numbers

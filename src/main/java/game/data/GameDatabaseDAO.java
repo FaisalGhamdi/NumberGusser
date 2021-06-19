@@ -3,6 +3,7 @@ package game.data;
 import game.models.Game;
 import game.models.Round;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -125,11 +126,14 @@ public class GameDatabaseDAO implements GameDAO{
 
     @Override
     public Game findGameToPlay(int id) {
-        final String sql =
-                    "SELECT * FROM game" +
-                            " WHERE status <> \"finished\" " +
-                            "AND gameId = (?);";
-        return jdbcTemplate.queryForObject(sql, new GameMapper(), id);
+        try {
+            final String sql =
+                    "SELECT * FROM gamedb.game WHERE status <> \"finished\" AND gameId = (?);";
+            int size = jdbcTemplate.getFetchSize();
+            return jdbcTemplate.queryForObject(sql, new GameMapper(), id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     private static final class GameMapper implements RowMapper<Game> {

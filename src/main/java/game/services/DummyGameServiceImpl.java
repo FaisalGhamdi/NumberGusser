@@ -60,6 +60,11 @@ public class DummyGameServiceImpl implements IGameService{
 
     }
 
+    @Override
+    public Game playGame(int id) {
+        return null;
+    }
+
     // helper method to generate random, not duplicate numbers
     public String generateAnswer() {
         // create a list to hold numbers 0-9

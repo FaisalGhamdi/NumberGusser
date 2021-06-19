@@ -42,48 +42,17 @@ public class GameController {
 
     @PostMapping("/guess")
     @ResponseStatus(HttpStatus.CREATED)
-    public Round guess(@RequestBody Round round, Game game) {
+    public ResponseEntity<Round> makeGuess(@RequestBody Round round) {
 
-        return gameService.addGuess(round, game, round.getGameId());
+        Game game = gameService.playGame(round.getGameId());
+        if (game == null) {
+            return new ResponseEntity("Game not found or has already been played!", HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(gameService.addGuess(round, game, round.getGameId()));
     }
 
     @GetMapping("/rounds/{id}")
     public List<Round>  findRoundsById(@PathVariable int id) {
         return gameService.getRoundsForId(id);
     }
-
-//
-//    @PostMapping
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public ToDo create(@RequestBody ToDo todo) {
-//        return dao.add(todo);
-//    }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ToDo> findById(@PathVariable int id) {
-//        ToDo result = dao.findById(id);
-//        if (result == null) {
-//            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
-//        }
-//        return ResponseEntity.ok(result);
-//    }
-//
-//    @PutMapping("/{id}")
-//    public ResponseEntity update(@PathVariable int id, @RequestBody ToDo todo) {
-//        ResponseEntity response = new ResponseEntity(HttpStatus.NOT_FOUND);
-//        if (id != todo.getId()) {
-//            response = new ResponseEntity(HttpStatus.UNPROCESSABLE_ENTITY);
-//        } else if (dao.update(todo)) {
-//            response = new ResponseEntity(HttpStatus.NO_CONTENT);
-//        }
-//        return response;
-//    }
-//
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity delete(@PathVariable int id) {
-//        if (dao.deleteById(id)) {
-//            return new ResponseEntity(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity(HttpStatus.NOT_FOUND);
-//    }
 }

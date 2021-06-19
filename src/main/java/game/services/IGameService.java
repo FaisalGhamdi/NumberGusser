@@ -13,5 +13,6 @@ public interface IGameService {
     List<Round> getRoundsForId(int gameId);
     // adds to Round , and updates Game table if game is done.
     Round addGuess(Round round, Game game, int id);
+    Game playGame(int id);
 
 }
