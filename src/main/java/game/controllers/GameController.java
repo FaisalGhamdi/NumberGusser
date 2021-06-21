@@ -28,7 +28,7 @@ public class GameController {
     public ResponseEntity<Game> findById(@PathVariable int id) {
         Game result = gameService.getGame(id);
         if (result == null) {
-            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Game not found!", HttpStatus.NOT_FOUND);
         }
         return ResponseEntity.ok(result);
     }

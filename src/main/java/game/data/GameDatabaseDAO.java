@@ -59,14 +59,17 @@ public class GameDatabaseDAO implements GameDAO{
 
     @Override
     public Game findById(int id) {
-        final String sql =
-                "SELECT gameid" +
-                ", case when status = \"in progress\" then \"Game in Progress - Can't show the answer!\"" +
-                " else answer end as answer" +
-                ", status FROM game" +
-                " WHERE gameid = (?);";
-
-        return jdbcTemplate.queryForObject(sql, new GameMapper(), id);
+        try {
+            final String sql =
+                    "SELECT gameid" +
+                            ", case when status = \"in progress\" then \"Game in Progress - Can't show the answer!\"" +
+                            " else answer end as answer" +
+                            ", status FROM game" +
+                            " WHERE gameid = (?);";
+            return jdbcTemplate.queryForObject(sql, new GameMapper(), id);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
@@ -129,7 +132,6 @@ public class GameDatabaseDAO implements GameDAO{
         try {
             final String sql =
                     "SELECT * FROM gamedb.game WHERE status <> \"finished\" AND gameId = (?);";
-            int size = jdbcTemplate.getFetchSize();
             return jdbcTemplate.queryForObject(sql, new GameMapper(), id);
         } catch (EmptyResultDataAccessException e) {
             return null;
