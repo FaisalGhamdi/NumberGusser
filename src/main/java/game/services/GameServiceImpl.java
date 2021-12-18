@@ -18,7 +18,8 @@ public class GameServiceImpl implements IGameService{
     }
 
     @Override
-    public Game add(Game game) {
+    public Game add() {
+        Game game = new Game();
         game.setAnswer(generateAnswer());
         game.setStatus("in progress");
         return dao.add(game);

@@ -18,7 +18,8 @@ public class DummyGameServiceImpl implements IGameService{
     }
 
     @Override
-    public Game add(Game game) {
+    public Game add() {
+        Game game = new Game();
         this.game = game;
         return game;
     }

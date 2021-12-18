@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IGameService {
 
-    Game add(Game game);
+    Game add();
     List<Game> all();
     Game getGame(int gameId);
     List<Round> getRoundsForId(int gameId);

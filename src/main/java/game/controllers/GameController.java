@@ -5,6 +5,7 @@ import game.models.Round;
 import game.services.GameServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.NumberUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class GameController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Game> findById(@PathVariable int id) {
+
         Game result = gameService.getGame(id);
         if (result == null) {
             return new ResponseEntity("Game not found!", HttpStatus.NOT_FOUND);
@@ -35,8 +37,8 @@ public class GameController {
 
     @PostMapping("/begin")
     @ResponseStatus(HttpStatus.CREATED)
-    public Game create(@RequestBody Game game) {
-        return gameService.add(game);
+    public Game create() {
+        return gameService.add();
     }
 
     @PostMapping("/guess")

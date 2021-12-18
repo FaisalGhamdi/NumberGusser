@@ -34,7 +34,7 @@ public class GameDaoTest {
         game.setGameId(1);
         game.setAnswer(answer);
         game.setStatus("in progress");
-        Game addedGame = dummyGameService.add(game);
+        Game addedGame = dummyGameService.add();
 
         // ACT & ASSERT
 
